@@ -9,15 +9,12 @@ olevaan listaan, mutta paluuviestissä vain
 kerrotaan tämän onnistuminen (ei palauteta 
 ko. listaa)
 end note
-palvelin --> Selain: HTML-sivu (201 Created)
 note over Selain: 
 Lähetetty muistiinpano lisätään lokaalisti 
 selaimen näyttämään listaan
 end note
-
-note over Selain:
-Selain suorittaa JS-koodissa määritetyn
-tapahtumakäsittelijän joka renderöi
-muistiinpanot lokaalin listan pohjalta
+palvelin --> Selain: HTML-sivu (201 Created)
+note over Selain: 
+Selain suorittaa tapahtumakäsittelijän, 
+joka tulostaa lähetetyn muistiinpanon konsoliin
 end note
-
