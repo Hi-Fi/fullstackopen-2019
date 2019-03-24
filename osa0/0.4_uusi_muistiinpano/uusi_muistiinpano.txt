@@ -1,0 +1,28 @@
+title https://fullstack-exampleapp.herokuapp.com/new_note sequence
+  
+note right of Selain: Käyttää täyttää ja lähettää lomakkeen
+Selain -> palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+Selain --> palvelin: Lomakkeen sisältö (application/x-www-form-urlencoded -muodossa)
+palvelin --> Selain: HTML-sivu (302 redirect)
+note over Selain: 
+Selain ohjautuu vastauksen mukaan
+https://fullstack-exampleapp.herokuapp.com/notes -sivulle
+end note
+Selain -> palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+palvelin --> Selain: HTML-sivu
+Selain -> palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin --> Selain: main.css
+Selain -> palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+palvelin --> Selain: main.js
+note over Selain:
+Selain suorittaa js-koodia,
+joka pyytää JSON-datan palvelimelta
+end note
+Selain -> palvelin: https://fullstack-exampleapp.herokuapp.com/data.json
+palvelin --> Selain: data.json ("[{"content":"HTML on helppoa","date":"2017-12-10T17:30:31.098Z"},{"c...")
+note over Selain:
+Selain suorittaa JS-koodissa määritetyn
+tapahtumakäsittelijän joka renderöi
+muistiinpanot saadun JSONin pohjalta
+end note
+

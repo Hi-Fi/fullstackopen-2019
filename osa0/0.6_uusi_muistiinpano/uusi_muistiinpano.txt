@@ -1,0 +1,23 @@
+title https://fullstack-exampleapp.herokuapp.com/new_note_spa sequence
+  
+note right of Selain: Käyttää täyttää ja lähettää lomakkeen
+Selain -> palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+Selain --> palvelin: Lomakkeen sisältö (application/json -muodossa)
+note over palvelin: 
+Lähetetty muistiinpano lisätään palvelimella
+olevaan listaan, mutta paluuviestissä vain 
+kerrotaan tämän onnistuminen (ei palauteta 
+ko. listaa)
+end note
+palvelin --> Selain: HTML-sivu (201 Created)
+note over Selain: 
+Lähetetty muistiinpano lisätään lokaalisti 
+selaimen näyttämään listaan
+end note
+
+note over Selain:
+Selain suorittaa JS-koodissa määritetyn
+tapahtumakäsittelijän joka renderöi
+muistiinpanot lokaalin listan pohjalta
+end note
+
