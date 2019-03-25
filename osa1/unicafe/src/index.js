@@ -17,19 +17,23 @@ const Statistics = ({good, neutral, bad}) => {
         return (
             <>
                 {header}
-                <Statistic text = "hyvä" value = {good} />
-                <Statistic text = "neutraali" value = {neutral} />
-                <Statistic text = "huono" value = {bad} />
-                <Statistic text = "yhteensä" value = {sum} />
-                <Statistic text = "keskiarvo" value = {average} />
-                <Statistic text = "positiivisia" value = {positive} />
+                <table>
+                    <tbody>
+                        <Statistic text = "hyvä" value = {good} />
+                        <Statistic text = "neutraali" value = {neutral} />
+                        <Statistic text = "huono" value = {bad} />
+                        <Statistic text = "yhteensä" value = {sum} />
+                        <Statistic text = "keskiarvo" value = {average} />
+                        <Statistic text = "positiivisia" value = {positive} />
+                    </tbody>
+                </table>
             </>
         )
     }
 }
 
 const Statistic = ({text, value}) => (
-    <p>{text} {value}</p>
+    <tr><td>{text}</td><td>{value}</td></tr>
 )
 
 const Button = ({name, handleClick}) => (
