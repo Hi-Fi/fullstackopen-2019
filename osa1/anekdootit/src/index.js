@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const Button = ({name, handleClick}) => (
-    <p><button onClick={handleClick}>{name}</button></p>
+    <button onClick={handleClick}>{name}</button>
 )
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const [points, setPoint] = useState(Array(props.anecdotes.length).fill(0))
 
   const nextAnecdote = () => {
       let min = 0
@@ -14,10 +15,21 @@ const App = (props) => {
       setSelected(Math.floor(Math.random() * (max - min)) + min)
   }
 
+  const addVote = (anecdoteIndex) => {
+      let newVotes = [...points]
+      newVotes[anecdoteIndex] += 1
+      setPoint(newVotes)
+  }
+
   return (
     <div>
-      {props.anecdotes[selected]}
-      <Button name="next anecdote" handleClick={nextAnecdote} />
+      <p>{props.anecdotes[selected]}</p>
+      <p>has {points[selected]} points</p>
+
+      <p>
+        <Button name="vote" handleClick={() => addVote(selected)} />
+        <Button name="next anecdote" handleClick={nextAnecdote} />
+      </p>
     </div>
   )
 }
