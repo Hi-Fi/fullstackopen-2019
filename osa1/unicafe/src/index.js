@@ -1,34 +1,36 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Content = ({ parts }) => (
-    <div>
-        <h1>statistiikka</h1>
-
-        {parts.map ( part => 
-            <Part part={part.name} votes={part.votes} key={part.name}/>
-        )}
-    </div>
-)
-
-const Part = (props) => (
-    <p>
-        {props.part} {props.votes}
-    </p>
-) 
-
 const Statistics = ({good, neutral, bad}) => {
     let sum = good + neutral + bad
     let average = (good - bad) / sum
-    let positive = 100 * (good / sum)
-    return (
-        <>
-            <p>yhteensä {sum}</p>
-            <p>keskiarvo {average}</p>
-            <p>positiivisia {positive} %</p>
-        </>
-    )
+    let positive = (100 * (good / sum))+ " %"
+    let header = <h1>statistiikka</h1>
+    if (sum == 0) {
+        return (
+            <>
+                {header}
+                <p>Ei yhtään palautetta annettu</p>
+            </>
+        )
+    } else {
+        return (
+            <>
+                {header}
+                <Statistic text = "hyvä" value = {good} />
+                <Statistic text = "neutraali" value = {neutral} />
+                <Statistic text = "huono" value = {bad} />
+                <Statistic text = "yhteensä" value = {sum} />
+                <Statistic text = "keskiarvo" value = {average} />
+                <Statistic text = "positiivisia" value = {positive} />
+            </>
+        )
+    }
 }
+
+const Statistic = ({text, value}) => (
+    <p>{text} {value}</p>
+)
 
 const Button = ({name, handleClick}) => (
     <button onClick={handleClick}>{name}</button>
@@ -64,7 +66,6 @@ const addBad = (newValue) => {
       <Button name="hyvä" handleClick={() => addGood(good + 1)} />
       <Button name="neutraali" handleClick={() => addNeutral(neutral + 1)} />
       <Button name="huono" handleClick={() => addBad(bad + 1)} />
-      <Content parts={parts} />
       <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
