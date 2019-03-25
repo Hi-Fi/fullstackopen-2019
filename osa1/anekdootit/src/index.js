@@ -21,8 +21,11 @@ const App = (props) => {
       setPoint(newVotes)
   }
 
+  let maxIndex = points.indexOf(Math.max(...points))
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{props.anecdotes[selected]}</p>
       <p>has {points[selected]} points</p>
 
@@ -30,6 +33,10 @@ const App = (props) => {
         <Button name="vote" handleClick={() => addVote(selected)} />
         <Button name="next anecdote" handleClick={nextAnecdote} />
       </p>
+
+      <h1>Anecdote with most votes</h1>
+      <p>{props.anecdotes[maxIndex]}</p>
+      <p>has {points[maxIndex]} points</p>
     </div>
   )
 }
