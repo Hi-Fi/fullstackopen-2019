@@ -17,7 +17,7 @@ const Part = (props) => (
     </p>
 ) 
 
-const Statistic = ({good, neutral, bad}) => {
+const Statistics = ({good, neutral, bad}) => {
     let sum = good + neutral + bad
     let average = (good - bad) / sum
     let positive = 100 * (good / sum)
@@ -65,7 +65,7 @@ const addBad = (newValue) => {
       <Button name="neutraali" handleClick={() => addNeutral(neutral + 1)} />
       <Button name="huono" handleClick={() => addBad(bad + 1)} />
       <Content parts={parts} />
-      <Statistic good={good} neutral={neutral} bad={bad}/>
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
 }
