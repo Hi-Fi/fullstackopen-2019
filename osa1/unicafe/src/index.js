@@ -6,7 +6,7 @@ const Statistics = ({good, neutral, bad}) => {
     let average = (good - bad) / sum
     let positive = (100 * (good / sum))+ " %"
     let header = <h1>statistiikka</h1>
-    if (sum == 0) {
+    if (sum === 0) {
         return (
             <>
                 {header}
@@ -53,12 +53,6 @@ const App = () => {
 const addBad = (newValue) => {
     setBad(newValue)
 }
-
-  let parts = [
-      {name: 'hyvä', votes: good},
-      {name: 'neutraali', votes: neutral},
-      {name: 'huono', votes: bad}
-  ]
 
   return (
     <div>
