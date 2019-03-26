@@ -17,11 +17,21 @@ const Part = (props) => (
     </p>
 )
 
+const Total = ({parts}) => {
+    let exercise_count = 0
+    console.log(parts)
+    parts.forEach ( part => exercise_count += part.exercises)
+    return (
+        <p>yhteensä {exercise_count} tehtävää</p>
+    )
+}
+
 const Course = ({course}) => {
         return (
             <div>
                 <Header course={course} />
                 <Content parts={course.parts} />
+                <Total parts={course.parts} />
             </div>
         )
 }
