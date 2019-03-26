@@ -18,9 +18,9 @@ const Part = (props) => (
 )
 
 const Total = ({parts}) => {
-    let exercise_count = 0
-    console.log(parts)
-    parts.forEach ( part => exercise_count += part.exercises)
+    let exercise_count = parts.reduce ( (exercise_count, current_part) => (
+        exercise_count+current_part.exercises 
+    ), 0)
     return (
         <p>yhteensä {exercise_count} tehtävää</p>
     )
