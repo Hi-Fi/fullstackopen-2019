@@ -21,8 +21,12 @@ const Contact = (props) => (
 
 const addPerson = (event) => {
   event.preventDefault()
-  setPersons(persons.concat({name: newName}))
-  setNewName('')
+  if (persons.some(e => e.name === newName)) {
+    alert(`${newName} on jo luettelossa`)
+  } else {
+    setPersons(persons.concat({name: newName}))
+    setNewName('')
+  }
 }
 
 
