@@ -10,7 +10,7 @@ const Countries = (props) => {
     return <Country country={filteredCountries[0]} />
   } else if (filteredCountries.length < 10 ) {
     return filteredCountries.map ( country => 
-        <p>{country.name}</p>
+        <p>{country.name} <button onClick={() => props.onClick(country.name)}>show</button></p>
     )
   } else {
     return <div>Too many matches, specify another filter</div>

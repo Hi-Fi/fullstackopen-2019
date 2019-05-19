@@ -19,7 +19,7 @@ const App = () => {
     <div>
       <Filter value={filter} onChange={(event) => setFilter(event.target.value)} />
 
-      <Countries countries={countries} filter={filter}/>
+      <Countries countries={countries} filter={filter} onClick={setFilter}/>
     </div>
   )
 
