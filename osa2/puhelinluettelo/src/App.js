@@ -1,38 +1,7 @@
 import React, { useState } from 'react'
-
-const Filter = (props) => (
-  <div>
-    Rajaa näytettäviä: <input value={props.value} onChange={props.onChange}/>
-  </div>
-)
-
-
-
-const Contacts = (props) => {
-  let i = 0
-  return props.persons.filter ( person => person.name.toLowerCase().includes(props.filter.toLowerCase())).map ( person => 
-      <Contact name={person.name} number={person.number} key={i++}/>
-  )
-}
-
-const Contact = (props) => (
-  <p>
-      {props.name} - {props.number}
-  </p>
-) 
-
-const PersonForm = (props) => (
-  <form>
-        <div>
-          nimi: <input value={props.name} onChange={props.nameOnChange}/>
-        </div>
-        <div>numero: <input value={props.number} onChange={props.numberOnChange}/>
-        </div>
-        <div>
-          <button type="submit" onClick={props.onClick}>lisää</button>
-        </div>
-      </form>
-)
+import PersonForm from './components/personForm'
+import Filter from './components/filter'
+import Contacts from './components/contacts'
 
 const App = () => {
   const [ persons, setPersons] = useState([
