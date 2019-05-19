@@ -2,20 +2,21 @@ import React, { useState } from 'react'
 
 const App = () => {
   const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', number: '31515315' }
   ]) 
   const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
 
   const Contacts = (props) => {
     let i = 0
     return props.persons.map ( person => 
-        <Contact name={person.name} key={i++}/>
+        <Contact name={person.name} number={person.number} key={i++}/>
     )
     }
 
 const Contact = (props) => (
     <p>
-        {props.name}
+        {props.name} - {props.number}
     </p>
 )
 
@@ -24,8 +25,9 @@ const addPerson = (event) => {
   if (persons.some(e => e.name === newName)) {
     alert(`${newName} on jo luettelossa`)
   } else {
-    setPersons(persons.concat({name: newName}))
+    setPersons(persons.concat({name: newName, number: newNumber}))
     setNewName('')
+    setNewNumber('')
   }
 }
 
@@ -36,6 +38,8 @@ const addPerson = (event) => {
       <form>
         <div>
           nimi: <input value={newName} onChange={(event) => setNewName(event.target.value)}/>
+        </div>
+        <div>numero: <input value={newNumber} onChange={(event) => setNewNumber(event.target.value)}/>
         </div>
         <div>
           <button type="submit" onClick={addPerson}>lisää</button>
