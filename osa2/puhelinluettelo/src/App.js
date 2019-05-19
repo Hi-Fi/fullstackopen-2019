@@ -1,30 +1,33 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PersonForm from './components/personForm'
 import Filter from './components/filter'
 import Contacts from './components/contacts'
+import axios from 'axios'
 
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Martti Tienari', number: '040-123456' },
-    { name: 'Arto Järvinen', number: '040-123456' },
-    { name: 'Lea Kutvonen', number: '040-123456' }
-  ]) 
+  const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
 
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
 
-const addPerson = (event) => {
-  event.preventDefault()
-  if (persons.some(e => e.name === newName)) {
-    alert(`${newName} on jo luettelossa`)
-  } else {
-    setPersons(persons.concat({name: newName, number: newNumber}))
-    setNewName('')
-    setNewNumber('')
+  const addPerson = (event) => {
+    event.preventDefault()
+    if (persons.some(e => e.name === newName)) {
+      alert(`${newName} on jo luettelossa`)
+    } else {
+      setPersons(persons.concat({name: newName, number: newNumber}))
+      setNewName('')
+      setNewNumber('')
+    }
   }
-}
 
 
   return (
