@@ -23,9 +23,13 @@ const App = () => {
     if (persons.some(e => e.name === newName)) {
       alert(`${newName} on jo luettelossa`)
     } else {
-      setPersons(persons.concat({name: newName, number: newNumber}))
-      setNewName('')
-      setNewNumber('')
+      axios
+        .post('http://localhost:3001/persons', {name: newName, number: newNumber})
+        .then (response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
