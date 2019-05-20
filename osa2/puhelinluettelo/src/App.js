@@ -21,7 +21,17 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     if (persons.some(e => e.name === newName)) {
-      alert(`${newName} on jo luettelossa`)
+      let person = {...persons.filter( person => person.name === newName)[0], name: newName, number: newNumber}
+      let id = person.id
+      if (window.confirm(`${person.name} on jo luettelossa, korvataanko vanha numero uudella?`)) {
+        personService
+          .updatePerson(person)
+          .then( response => {
+            setPersons(persons.map(person => person.id === id ? response.data : person))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
     } else {
       personService
         .create({name: newName, number: newNumber})
