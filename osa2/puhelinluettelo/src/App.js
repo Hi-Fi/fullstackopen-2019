@@ -11,6 +11,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
   const [infoMessage, setInfoMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -37,6 +38,15 @@ const App = () => {
             )
             setTimeout(() => {
               setInfoMessage(null)
+            }, 3000)
+          })
+          .catch ( error => {
+            setPersons(persons.filter( person => person.id !== id))
+            setErrorMessage(
+              `Henkilö ${person.name} oli jo poistettu`
+            )
+            setTimeout(() => {
+              setErrorMessage(null)
             }, 3000)
           })
       }
@@ -77,7 +87,8 @@ const App = () => {
   return (
     <div>
       <h2>Puhelinluettelo</h2>
-      <Notification message={infoMessage} />
+      <Notification message={infoMessage} className="info"/>
+      <Notification message={errorMessage} className="error"/>
       <Filter value={filter} onChange={(event) => setFilter(event.target.value)} />
       <h2>Lisää uusi</h2>
       <PersonForm name={newName} number={newNumber} nameOnChange={(event) => setNewName(event.target.value)} numberOnChange={(event) => setNewNumber(event.target.value)} onClick={addPerson}/>
