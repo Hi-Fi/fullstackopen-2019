@@ -3,12 +3,14 @@ import PersonForm from './components/personForm'
 import Filter from './components/filter'
 import Contacts from './components/contacts'
 import personService from './services/persons'
+import Notification from './components/notification'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+  const [infoMessage, setInfoMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -30,6 +32,12 @@ const App = () => {
             setPersons(persons.map(person => person.id === id ? response.data : person))
             setNewName('')
             setNewNumber('')
+            setInfoMessage(
+              `Päivitettiin henkilön ${person.name} puhelinnumero`
+            )
+            setTimeout(() => {
+              setInfoMessage(null)
+            }, 3000)
           })
       }
     } else {
@@ -39,16 +47,29 @@ const App = () => {
           setPersons(persons.concat(response.data))
           setNewName('')
           setNewNumber('')
+          setInfoMessage(
+            `Lisättiin ${response.data.name}`
+          )
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 3000)
         })
     }
   }
 
   const deletePerson = (id) => {
-    if (window.confirm(`Poistetaanko ${persons.filter( person => person.id === id)[0].name}?`)) {
+    let person = persons.filter( person => person.id === id)[0]
+    if (window.confirm(`Poistetaanko ${person.name}?`)) {
       personService
         .deletePerson(id)
         .then( response => {
           setPersons(persons.filter( person => person.id !== id))
+          setInfoMessage(
+            `Poistettiin henkilö ${person.name}`
+          )
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 3000)
         })
     }
   }
@@ -56,6 +77,7 @@ const App = () => {
   return (
     <div>
       <h2>Puhelinluettelo</h2>
+      <Notification message={infoMessage} />
       <Filter value={filter} onChange={(event) => setFilter(event.target.value)} />
       <h2>Lisää uusi</h2>
       <PersonForm name={newName} number={newNumber} nameOnChange={(event) => setNewName(event.target.value)} numberOnChange={(event) => setNewNumber(event.target.value)} onClick={addPerson}/>
