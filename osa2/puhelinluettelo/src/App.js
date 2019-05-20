@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PersonForm from './components/personForm'
 import Filter from './components/filter'
 import Contacts from './components/contacts'
-import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
@@ -11,8 +11,8 @@ const App = () => {
   const [ filter, setFilter ] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(response => {
         setPersons(response.data)
       })
@@ -23,8 +23,8 @@ const App = () => {
     if (persons.some(e => e.name === newName)) {
       alert(`${newName} on jo luettelossa`)
     } else {
-      axios
-        .post('http://localhost:3001/persons', {name: newName, number: newNumber})
+      personService
+        .create({name: newName, number: newNumber})
         .then (response => {
           setPersons(persons.concat(response.data))
           setNewName('')
