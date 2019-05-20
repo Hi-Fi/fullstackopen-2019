@@ -33,6 +33,15 @@ const App = () => {
     }
   }
 
+  const deletePerson = (id) => {
+    if (window.confirm(`Poistetaanko ${persons.filter( person => person.id === id)[0].name}?`)) {
+      personService
+        .deletePerson(id)
+        .then( response => {
+          setPersons(persons.filter( person => person.id !== id))
+        })
+    }
+  }
 
   return (
     <div>
@@ -41,7 +50,7 @@ const App = () => {
       <h2>Lisää uusi</h2>
       <PersonForm name={newName} number={newNumber} nameOnChange={(event) => setNewName(event.target.value)} numberOnChange={(event) => setNewNumber(event.target.value)} onClick={addPerson}/>
       <h2>Numerot</h2>
-      <Contacts persons={persons} filter={filter}/>
+      <Contacts persons={persons} filter={filter} deleteCall={deletePerson}/>
     </div>
   )
 
