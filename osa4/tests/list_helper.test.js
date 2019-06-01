@@ -31,3 +31,17 @@ describe('total likes', () => {
         expect(listHelper.totalLikes([getBlog(2), getBlog(2), getBlog(2), getBlog(2), getBlog(2)])).toBe(10)
     })
 })
+
+describe('favorite blog', () => {
+    test('get most liked blog from single blog', () => {
+        expect(listHelper.favoriteBlog([getBlog(1)])).toEqual(getBlog(1))
+    })
+
+    test('get most liked blog from multiple blogs', () => {
+        expect(listHelper.favoriteBlog([getBlog(1), getBlog(1), getBlog(2)])).toEqual(getBlog(2))
+    })
+
+    test('handle empty list when checking most liked blog',  () => {
+        expect(listHelper.favoriteBlog([])).toEqual(null)
+    })
+})
