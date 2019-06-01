@@ -45,3 +45,17 @@ describe('favorite blog', () => {
         expect(listHelper.favoriteBlog([])).toEqual(null)
     })
 })
+
+describe('most blogs', () => {
+    test('get most blogs by author from single blog', () => {
+        expect(listHelper.mostBlogs([getBlog(1)])).toEqual({ "author": "author with 1", "blogs": 1})
+    })
+
+    test('get most blogs by author from multiple blogs', () => {
+        expect(listHelper.mostBlogs([getBlog(1), getBlog(1), getBlog(2)])).toEqual({ "author": "author with 1", "blogs": 2})
+    })
+
+    test('handle empty list when checking most blogs by author',  () => {
+        expect(listHelper.mostBlogs([])).toEqual(null)
+    })
+})
