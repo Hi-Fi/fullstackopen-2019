@@ -51,6 +51,19 @@ describe("adding new blogs", () => {
     delete postedBlog.id
     expect(postedBlog).toEqual(newBlog)
   })
+
+  test('default value for likes is 0', async() => {
+    let newBlog = helper.generateBlog(1)
+    delete newBlog.likes
+
+    let response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body.likes).toBe(0)
+  })
 })
 
 afterAll( async() => {
