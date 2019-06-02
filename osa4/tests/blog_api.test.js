@@ -64,6 +64,40 @@ describe("adding new blogs", () => {
 
     expect(response.body.likes).toBe(0)
   })
+
+  test('status 400 without title', async() => {
+    let newBlog = helper.generateBlog(1)
+    delete newBlog.title
+
+    let response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('status 400 without url', async() => {
+    let newBlog = helper.generateBlog(1)
+    delete newBlog.url
+
+    let response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('status 400 without url and title', async() => {
+    let newBlog = helper.generateBlog(1)
+    delete newBlog.url
+    delete newBlog.title
+
+    let response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    })
 })
 
 afterAll( async() => {
