@@ -27,11 +27,32 @@ describe('when there is initially some notes saved', () => {
     
     response.body.map ( blog => {
       expect(blog.id).toBeDefined()
-    })
-      
+    })    
   })
 })
 
-afterAll(() => {
-  mongoose.connection.close()
+describe("adding new blogs", () => {
+
+  test('add new blog', async() => {
+    let newBlog = helper.generateBlog(0)
+    let originalBlogs = await helper.blogsInDb()
+
+    let response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    let newBlogs = await helper.blogsInDb()
+
+    expect(newBlogs.length).toBe(originalBlogs.length + 1)
+
+    let postedBlog = response.body
+    delete postedBlog.id
+    expect(postedBlog).toEqual(newBlog)
+  })
+})
+
+afterAll( async() => {
+  await mongoose.connection.close()
 })

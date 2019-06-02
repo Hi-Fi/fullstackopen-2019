@@ -1,3 +1,13 @@
+const Blog = require('../models/blog')
+
+const generateBlog = (likes) => (
+    {
+        title: `title with ${likes}`,
+        author: `author with ${likes}`,
+        url: `url with ${likes}`,
+        likes: likes,
+    }
+)
 
 const initialBlogs = [
     {
@@ -50,6 +60,13 @@ const initialBlogs = [
     }  
   ]
 
+const blogsInDb = async () => {
+    const blogs = await Blog.find({})
+    return blogs.map(blog => blog.toJSON())
+}
+
 module.exports = {
-    initialBlogs
+    initialBlogs,
+    generateBlog,
+    blogsInDb
 }
