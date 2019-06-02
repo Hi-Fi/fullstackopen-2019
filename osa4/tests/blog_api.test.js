@@ -100,6 +100,26 @@ describe("adding new blogs", () => {
     })
 })
 
+describe('deleting of blogs', () => {
+
+  beforeEach(async () => {
+      await Blog.deleteMany({})
+  })
+
+  test('delete existing blog', async() => {
+    let blog = await Blog(helper.generateBlog(1)).save()
+    let blogsInBeginning = await helper.blogsInDb()
+
+
+    let response = await api
+    .delete(`/api/blogs/${blog.id}`)
+    .expect(204)
+    let newBlogs = await helper.blogsInDb()
+
+    expect(newBlogs.length).toBe(blogsInBeginning.length-1)
+  })
+})
+
 afterAll( async() => {
   await mongoose.connection.close()
 })
