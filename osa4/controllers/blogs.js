@@ -29,4 +29,18 @@ blogsRouter.get('/', (request, response) => {
     response.status(204).end()
   })
 
+  blogsRouter.put('/:id', async (request, response) => {
+    let newBlog = new Blog(request.body)
+    try {
+      let updatedBlog = await Blog.findByIdAndUpdate(request.params.id, newBlog, {new: true})
+      if (updatedBlog) {
+        response.json(updatedBlog.toJSON())
+      } else {
+        response.status(404).json({"message": "No update done"})
+      }
+    } catch(exception) {
+      response.status(404).json({ "message": exception.message })
+    }
+  })
+
   module.exports = blogsRouter

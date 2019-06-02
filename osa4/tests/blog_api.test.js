@@ -139,6 +139,36 @@ describe('deleting of blogs', () => {
   })
 })
 
+describe('Modify blogs', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+  })
+
+  test('update blog', async() => {
+    let blog = await (new Blog(helper.generateBlog(1))).save()
+    let newBlog = { ...blog.toObject(), likes: 10 }
+    let response = await api
+    .put(`/api/blogs/${blog.id}`)
+    .send(newBlog)
+    .expect(200)
+
+    let storedBlog = response.body
+    expect(storedBlog).toEqual(newBlog)
+  })
+
+  test('try to update non-existing blog', async() => {
+    var id = await mongoose.Types.ObjectId();
+
+    let newBlog = Blog(helper.generateBlog(1))
+
+    let response = await api
+    .put(`/api/blogs/${id}`)
+    .send(newBlog)
+    .expect(404)
+  })
+
+})
+
 afterAll( async() => {
   await mongoose.connection.close()
 })
