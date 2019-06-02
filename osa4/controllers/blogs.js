@@ -20,7 +20,12 @@ blogsRouter.get('/', (request, response) => {
   })
 
   blogsRouter.delete('/:id', async (request, response) => {
-    await Blog.findByIdAndRemove(request.params.id)
+    try {
+      await Blog.findByIdAndRemove(request.params.id)
+      
+    } catch(exception) {
+      //delete can always fake that things were done
+    }
     response.status(204).end()
   })
 

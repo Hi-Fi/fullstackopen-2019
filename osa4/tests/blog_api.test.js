@@ -118,6 +118,25 @@ describe('deleting of blogs', () => {
 
     expect(newBlogs.length).toBe(blogsInBeginning.length-1)
   })
+
+  test('try to delete non-existing blog', async() => {
+    let id = (new Date).getTime()
+    let response = await api
+    .delete(`/api/blogs/${id}`)
+    .expect(204)
+  })
+
+  test('try to delete existing blog twice', async() => {
+    let blog = await Blog(helper.generateBlog(1)).save()
+
+    await api
+    .delete(`/api/blogs/${blog.id}`)
+    .expect(204)
+    
+    await api
+    .delete(`/api/blogs/${blog.id}`)
+    .expect(204)
+  })
 })
 
 afterAll( async() => {
