@@ -1,6 +1,7 @@
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const uniqueValidator = require('mongoose-unique-validator')
 
 usersRouter.get('/', async (request, response) => {
     let users = await User.find({})
@@ -10,6 +11,10 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
     try {
       let body = request.body
+      let minPasswordLength = 3
+      if (!body.password || body.password.length < minPasswordLength) {
+          throw({ message: `Password is not long enough. At least ${minPasswordLength} characters needed`})
+      }
       const saltRounds = 10
       const passwordHash = await bcrypt.hash(body.password, saltRounds)  
 

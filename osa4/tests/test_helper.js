@@ -1,4 +1,5 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const generateBlog = (likes) => (
     {
@@ -7,6 +8,15 @@ const generateBlog = (likes) => (
         url: `url with ${likes}`,
         likes: likes,
     }
+)
+
+const generateUser = () => (
+  {
+    name: ((new Date()).getTime()).toString(),
+    username: ((new Date()).getTime()).toString(),
+    password: ((new Date()).getTime()).toString()
+  }
+
 )
 
 const initialBlogs = [
@@ -65,8 +75,15 @@ const blogsInDb = async () => {
     return blogs.map(blog => blog.toJSON())
 }
 
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(user => user.toJSON())
+}
+
 module.exports = {
     initialBlogs,
     generateBlog,
-    blogsInDb
+    blogsInDb,
+    generateUser,
+    usersInDb
 }
