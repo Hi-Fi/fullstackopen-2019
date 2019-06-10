@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const uniqueValidator = require('mongoose-unique-validator')
 
 usersRouter.get('/', async (request, response) => {
+    console.log(await User.find({}))
     let users = await User.find({}).populate('blogs', { id: 1, title: 1, author: 1, url: 1})
     response.json(users)
 })
