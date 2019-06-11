@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, updateListWhenBlogLiked }) => {
+const Blog = ({ blog, updateBlogList, notifyUser}) => {
 
   const [showDetails, setShowDetails] = useState(false)
   const [refreshBlog, setRefreshBlog] = useState(false)
@@ -30,11 +30,25 @@ const Blog = ({ blog, updateListWhenBlogLiked }) => {
       await blogService.updateBlog(blog.id, newBlog)
       blog.likes = blog.likes+1
       setRefreshBlog(!refreshBlog)
-      updateListWhenBlogLiked(blog)
+      updateBlogList(blog)
     } catch(exception) {
 
     }
-    
+  }
+
+  const removeBlog = async (event) => {
+    let confirmation = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
+    if(confirmation) {
+      try {
+        await blogService.deleteBlog(blog.id)
+        blog.deleted = true
+        updateBlogList(blog)
+      } catch(exception) {
+        let errorMessage = exception.response ? exception.response.data : exception.message
+        errorMessage = errorMessage.error ? errorMessage.error : errorMessage
+        notifyUser(errorMessage, "error")
+      }
+    }
   }
 
   let basicBlog = () => (
@@ -49,6 +63,7 @@ const Blog = ({ blog, updateListWhenBlogLiked }) => {
       {blog.url}<br />
       {blog.likes} likes <button value="like" onClick={likeBlog}>like</button><br />
       added by: {blog.author}
+      <button value="remove" onClick={removeBlog}>remove</button>
     </div>
   )
 
