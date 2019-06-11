@@ -16,10 +16,13 @@ const getAll = () => {
 }
 
 const submitNew = async (content) => {
-  console.log(content)
   let response = await axios.post(baseUrl, content)
   return response.data
-
 }
 
-export default { getAll, submitNew, setToken, clearToken }
+const updateBlog = async (blog_id, blog) => {
+  let response = await axios.put(baseUrl+`/${blog_id}`, blog)
+  return response.data
+}
+
+export default { getAll, submitNew, setToken, clearToken, updateBlog }
