@@ -16,14 +16,21 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    let storedUser = window.localStorage.getItem('user')
+    if (storedUser) {
+      setUser(JSON.parse(storedUser))
+    }
+  }, [])
+
   const makeLogin = async (event) => {
     event.preventDefault()
-    console.log(username, password)
     try {
       let user = await loginService.login({username, password})
       setUser(user)
       setUsername('')
       setPassword('')
+      window.localStorage.setItem('user', JSON.stringify(user))
     } catch(exception) {
       setErrorMessage('käyttäjätunnus tai salasana virheellinen')
       setTimeout(() => {
@@ -32,10 +39,16 @@ const App = () => {
     }
   }
 
+  const makeLogout = (event) => {
+    window.localStorage.removeItem('user')
+    setUser(null)
+  }
+
   const blogView = () => (
     <div>
       <h2>blogs</h2>
       <div>{user.name} logged in</div>
+      <input onClick={makeLogout} type="button" value="logout" />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
