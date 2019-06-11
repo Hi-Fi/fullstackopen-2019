@@ -33,6 +33,10 @@ const App = () => {
 
   const createBlogViewRef = React.createRef()
 
+  const updateListWhenBlogLiked = (blog) => {
+    setBlogs(blogs.filter( currentBlog => currentBlog.id !== blog.id).concat(blog))
+  }
+
   const nofifyUser = (message, level) => {
       setNotification({ message, level })
       setTimeout(() => {
@@ -116,8 +120,8 @@ const App = () => {
       {createBlogView()}
 
       <h2>existing blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      {blogs.sort( (a, b) => b.likes - a.likes).map(blog =>
+        <Blog key={blog.id} blog={blog} updateListWhenBlogLiked={updateListWhenBlogLiked} />
       )}
     </div>
   )

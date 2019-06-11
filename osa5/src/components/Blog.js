@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateListWhenBlogLiked }) => {
 
   const [showDetails, setShowDetails] = useState(false)
   const [refreshBlog, setRefreshBlog] = useState(false)
@@ -30,6 +30,7 @@ const Blog = ({ blog }) => {
       await blogService.updateBlog(blog.id, newBlog)
       blog.likes = blog.likes+1
       setRefreshBlog(!refreshBlog)
+      updateListWhenBlogLiked(blog)
     } catch(exception) {
 
     }
