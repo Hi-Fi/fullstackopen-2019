@@ -9,6 +9,9 @@ const App = () => {
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [title, setTitle] = useState('') 
+  const [author, setAuthor] = useState('') 
+  const [url, setUrl] = useState('') 
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -19,14 +22,33 @@ const App = () => {
   useEffect(() => {
     let storedUser = window.localStorage.getItem('user')
     if (storedUser) {
-      setUser(JSON.parse(storedUser))
+      storedUser = JSON.parse(storedUser)
+      setUser(storedUser)
+      blogService.setToken(storedUser.token)
     }
   }, [])
+
+  const submitBlog = async (event) => {
+    event.preventDefault()
+    try {
+      let blog = await blogService.submitNew({title, author, url})
+      setBlogs(blogs.concat(blog))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch(exception) {
+      setErrorMessage(exception)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
 
   const makeLogin = async (event) => {
     event.preventDefault()
     try {
       let user = await loginService.login({username, password})
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -41,14 +63,47 @@ const App = () => {
 
   const makeLogout = (event) => {
     window.localStorage.removeItem('user')
+    blogService.clearToken()
     setUser(null)
   }
+
+  const createBlogView = ()  => (
+    <div>
+      <form onSubmit={submitBlog}>
+        <div>
+          title: <input value={title}
+                        onChange={({ target }) => setTitle(target.value)}
+                        name="Title" 
+                        />
+        </div>
+        <div>
+          author: <input value={author}
+                        onChange={({ target }) => setAuthor(target.value)}
+                        name="Author" 
+                        />
+        </div>
+        <div>
+          url: <input value={url}
+                        onChange={({ target }) => setUrl(target.value)}
+                        name="URL" 
+                        />
+        </div>
+        <button type="submit">create</button>
+      </form>
+
+    </div>
+  )
 
   const blogView = () => (
     <div>
       <h2>blogs</h2>
       <div>{user.name} logged in</div>
       <input onClick={makeLogout} type="button" value="logout" />
+
+      <h2>create new</h2>
+      {createBlogView()}
+
+      <h2>existing blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
@@ -77,6 +132,8 @@ const App = () => {
       </form>
     </div>
   )
+
+  
 
   return (
     <div>
