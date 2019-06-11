@@ -51,6 +51,10 @@ const Blog = ({ blog, updateBlogList, notifyUser}) => {
     }
   }
 
+  let isUserCreatorOfBlog = () => {
+    return JSON.parse(window.localStorage.getItem('user')).username === blog.user.username
+  }
+
   let basicBlog = () => (
     <div>
       <span onClick={toggleShowDetails}>{blog.title}</span> {blog.author}
@@ -63,7 +67,7 @@ const Blog = ({ blog, updateBlogList, notifyUser}) => {
       {blog.url}<br />
       {blog.likes} likes <button value="like" onClick={likeBlog}>like</button><br />
       added by: {blog.author}
-      <button value="remove" onClick={removeBlog}>remove</button>
+      {isUserCreatorOfBlog() && <button value="remove" onClick={removeBlog}>remove</button>}
     </div>
   )
 
