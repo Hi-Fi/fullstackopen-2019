@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
   const [title, setTitle] = useState('') 
   const [author, setAuthor] = useState('') 
   const [url, setUrl] = useState('') 
@@ -28,6 +29,13 @@ const App = () => {
     }
   }, [])
 
+  const nofifyUser = (message, level) => {
+      setNotification({ message, level })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    }
+
   const submitBlog = async (event) => {
     event.preventDefault()
     try {
@@ -37,12 +45,10 @@ const App = () => {
       setAuthor('')
       setUrl('')
     } catch(exception) {
-      setErrorMessage(exception)
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
+      let errorMessage = exception.response ? exception.response.data : exception.message
+      nofifyUser(errorMessage, "error")
   }
+}
 
   const makeLogin = async (event) => {
     event.preventDefault()
@@ -54,10 +60,7 @@ const App = () => {
       setPassword('')
       window.localStorage.setItem('user', JSON.stringify(user))
     } catch(exception) {
-      setErrorMessage('käyttäjätunnus tai salasana virheellinen')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      nofifyUser('käyttäjätunnus tai salasana virheellinen', "error")
     }
   }
 
@@ -65,9 +68,10 @@ const App = () => {
     window.localStorage.removeItem('user')
     blogService.clearToken()
     setUser(null)
+    nofifyUser("user logged out", "info")
   }
 
-  const createBlogView = ()  => (
+  const createBlogView = () => (
     <div>
       <form onSubmit={submitBlog}>
         <div>
@@ -113,9 +117,6 @@ const App = () => {
   const loginView = () => (
     <div>
       <h2>log in to application</h2>
-      {errorMessage && <div className="error">
-        {errorMessage}
-      </div>}
       <form onSubmit={makeLogin}>
         <div>
         käyttäjätunnus: <input value={username} 
@@ -123,7 +124,7 @@ const App = () => {
                               name="Username"/>
         </div>
         <div>
-        salasana: <input type="passord" 
+        salasana: <input type="password" 
                         value={password} 
                         name="Password"
                         onChange={({ target }) => setPassword(target.value)}/>
@@ -137,6 +138,7 @@ const App = () => {
 
   return (
     <div>
+      {notification && Notification(notification.message, notification.level)}
       {user === null ? 
         loginView() :
         blogView() }
