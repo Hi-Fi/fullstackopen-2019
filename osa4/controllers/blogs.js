@@ -13,7 +13,6 @@ blogsRouter.get('/', async (request, response) => {
   blogsRouter.post('/', async (request, response) => {
     try {
       let decodedToken = jwt.verify(request.token, process.env.SECRET)
-      console.log(decodedToken)
       if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
       }
@@ -53,7 +52,6 @@ blogsRouter.get('/', async (request, response) => {
         return response.status(401).json({ error: 'token missing or invalid' })
       }
     } catch(exception) {
-      console.log(exception)
       //delete can always fake that things were done
     }
     response.status(204).end()
