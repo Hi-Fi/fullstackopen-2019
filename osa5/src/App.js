@@ -3,6 +3,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/notification'
+import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -29,6 +31,8 @@ const App = () => {
     }
   }, [])
 
+  const createBlogViewRef = React.createRef()
+
   const nofifyUser = (message, level) => {
       setNotification({ message, level })
       setTimeout(() => {
@@ -39,12 +43,14 @@ const App = () => {
   const submitBlog = async (event) => {
     event.preventDefault()
     try {
+      createBlogViewRef.current.toggleVisibility()
       let blog = await blogService.submitNew({title, author, url})
       setBlogs(blogs.concat(blog))
       setTitle('')
       setAuthor('')
       setUrl('')
-    } catch(exception) {
+    } catch(exception) {  
+      createBlogViewRef.current.toggleVisibility()
       let errorMessage = exception.response ? exception.response.data : exception.message
       nofifyUser(errorMessage, "error")
   }
@@ -72,30 +78,32 @@ const App = () => {
   }
 
   const createBlogView = () => (
-    <div>
-      <form onSubmit={submitBlog}>
-        <div>
-          title: <input value={title}
-                        onChange={({ target }) => setTitle(target.value)}
-                        name="Title" 
-                        />
-        </div>
-        <div>
-          author: <input value={author}
-                        onChange={({ target }) => setAuthor(target.value)}
-                        name="Author" 
-                        />
-        </div>
-        <div>
-          url: <input value={url}
-                        onChange={({ target }) => setUrl(target.value)}
-                        name="URL" 
-                        />
-        </div>
-        <button type="submit">create</button>
-      </form>
+    <Togglable buttonLabel="Create new" ref={createBlogViewRef}>
+      <div>
+        <form onSubmit={submitBlog}>
+          <div>
+            title: <input value={title}
+                          onChange={({ target }) => setTitle(target.value)}
+                          name="Title" 
+                          />
+          </div>
+          <div>
+            author: <input value={author}
+                          onChange={({ target }) => setAuthor(target.value)}
+                          name="Author" 
+                          />
+          </div>
+          <div>
+            url: <input value={url}
+                          onChange={({ target }) => setUrl(target.value)}
+                          name="URL" 
+                          />
+          </div>
+          <button type="submit">create</button>
+        </form>
 
-    </div>
+      </div>
+    </Togglable>
   )
 
   const blogView = () => (
@@ -113,34 +121,17 @@ const App = () => {
       )}
     </div>
   )
-
-  const loginView = () => (
-    <div>
-      <h2>log in to application</h2>
-      <form onSubmit={makeLogin}>
-        <div>
-        käyttäjätunnus: <input value={username} 
-                              onChange={({ target }) => setUsername(target.value)}
-                              name="Username"/>
-        </div>
-        <div>
-        salasana: <input type="password" 
-                        value={password} 
-                        name="Password"
-                        onChange={({ target }) => setPassword(target.value)}/>
-        </div>
-        <button type="submit">kirjaudu</button>
-      </form>
-    </div>
-  )
-
   
 
   return (
     <div>
       {notification && Notification(notification.message, notification.level)}
       {user === null ? 
-        loginView() :
+        <LoginForm password={password} 
+                  username={username} 
+                  handleSubmit={makeLogin} 
+                  handlePasswordChange={({ target }) => setPassword(target.value)} 
+                  handleUsernameChange={({ target }) => setUsername(target.value)} /> :
         blogView() }
     </div>
   )
