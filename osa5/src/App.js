@@ -8,18 +8,18 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
-  const [title, setTitle] = useState('') 
-  const [author, setAuthor] = useState('') 
-  const [url, setUrl] = useState('') 
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -42,47 +42,47 @@ const App = () => {
   }
 
   const nofifyUser = (message, level) => {
-      setNotification({ message, level })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-    }
+    setNotification({ message, level })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
 
   const submitBlog = async (event) => {
     event.preventDefault()
     try {
       createBlogViewRef.current.toggleVisibility()
-      let blog = await blogService.submitNew({title, author, url})
+      let blog = await blogService.submitNew({ title, author, url })
       setBlogs(blogs.concat(blog))
       setTitle('')
       setAuthor('')
       setUrl('')
-    } catch(exception) {  
+    } catch(exception) {
       createBlogViewRef.current.toggleVisibility()
       let errorMessage = exception.response ? exception.response.data : exception.message
-      nofifyUser(errorMessage, "error")
+      nofifyUser(errorMessage, 'error')
+    }
   }
-}
 
   const makeLogin = async (event) => {
     event.preventDefault()
     try {
-      let user = await loginService.login({username, password})
+      let user = await loginService.login({ username, password })
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
       window.localStorage.setItem('user', JSON.stringify(user))
     } catch(exception) {
-      nofifyUser('käyttäjätunnus tai salasana virheellinen', "error")
+      nofifyUser('käyttäjätunnus tai salasana virheellinen', 'error')
     }
   }
 
-  const makeLogout = (event) => {
+  const makeLogout = () => {
     window.localStorage.removeItem('user')
     blogService.clearToken()
     setUser(null)
-    nofifyUser("user logged out", "info")
+    nofifyUser('user logged out', 'info')
   }
 
   const createBlogView = () => (
@@ -91,21 +91,21 @@ const App = () => {
         <form onSubmit={submitBlog}>
           <div>
             title: <input value={title}
-                          onChange={({ target }) => setTitle(target.value)}
-                          name="Title" 
-                          />
+              onChange={({ target }) => setTitle(target.value)}
+              name="Title"
+            />
           </div>
           <div>
             author: <input value={author}
-                          onChange={({ target }) => setAuthor(target.value)}
-                          name="Author" 
-                          />
+              onChange={({ target }) => setAuthor(target.value)}
+              name="Author"
+            />
           </div>
           <div>
             url: <input value={url}
-                          onChange={({ target }) => setUrl(target.value)}
-                          name="URL" 
-                          />
+              onChange={({ target }) => setUrl(target.value)}
+              name="URL"
+            />
           </div>
           <button type="submit">create</button>
         </form>
@@ -129,17 +129,17 @@ const App = () => {
       )}
     </div>
   )
-  
+
 
   return (
     <div>
       {notification && Notification(notification.message, notification.level)}
-      {user === null ? 
-        <LoginForm password={password} 
-                  username={username} 
-                  handleSubmit={makeLogin} 
-                  handlePasswordChange={({ target }) => setPassword(target.value)} 
-                  handleUsernameChange={({ target }) => setUsername(target.value)} /> :
+      {user === null ?
+        <LoginForm password={password}
+          username={username}
+          handleSubmit={makeLogin}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleUsernameChange={({ target }) => setUsername(target.value)} /> :
         blogView() }
     </div>
   )

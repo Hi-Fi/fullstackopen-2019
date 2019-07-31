@@ -3,7 +3,7 @@ import axios from 'axios'
 const baseUrl = '/api/blogs'
 
 const setToken = (token) => {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}` 
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
 
 const clearToken = () => {

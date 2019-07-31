@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, updateBlogList, notifyUser}) => {
+const Blog = ({ blog, updateBlogList, notifyUser }) => {
 
   const [showDetails, setShowDetails] = useState(false)
   const [refreshBlog, setRefreshBlog] = useState(false)
@@ -14,29 +14,29 @@ const Blog = ({ blog, updateBlogList, notifyUser}) => {
     marginBottom: 5
   }
 
-  const toggleShowDetails = (event) => {
+  const toggleShowDetails = () => {
     setShowDetails(!showDetails)
   }
 
-  const likeBlog = async (event) => {
-    let newBlog = { 
-                    author: blog.author,
-                    url: blog.url,
-                    user: blog.user,
-                    title: blog.title,
-                    likes: blog.likes+1
-                  }
+  const likeBlog = async () => {
+    let newBlog = {
+      author: blog.author,
+      url: blog.url,
+      user: blog.user,
+      title: blog.title,
+      likes: blog.likes+1
+    }
     try {
       await blogService.updateBlog(blog.id, newBlog)
       blog.likes = blog.likes+1
       setRefreshBlog(!refreshBlog)
       updateBlogList(blog)
     } catch(exception) {
-
+      //No logic here
     }
   }
 
-  const removeBlog = async (event) => {
+  const removeBlog = async () => {
     let confirmation = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
     if(confirmation) {
       try {
@@ -46,7 +46,7 @@ const Blog = ({ blog, updateBlogList, notifyUser}) => {
       } catch(exception) {
         let errorMessage = exception.response ? exception.response.data : exception.message
         errorMessage = errorMessage.error ? errorMessage.error : errorMessage
-        notifyUser(errorMessage, "error")
+        notifyUser(errorMessage, 'error')
       }
     }
   }
@@ -58,10 +58,10 @@ const Blog = ({ blog, updateBlogList, notifyUser}) => {
   let basicBlog = () => (
     <div>
       <span onClick={toggleShowDetails}>{blog.title}</span> {blog.author}
-  </div>
+    </div>
   )
 
-  let fullBlog = () => (  
+  let fullBlog = () => (
     <div>
       <span onClick={toggleShowDetails}>{blog.title}</span><br />
       {blog.url}<br />
@@ -72,12 +72,12 @@ const Blog = ({ blog, updateBlogList, notifyUser}) => {
   )
 
   return (
-  <div style={blogStyle} refresh={refreshBlog.toString()}>
-    {!showDetails && basicBlog()}
-    {showDetails && fullBlog()}
-  </div>
-    
-  
+    <div style={blogStyle} refresh={refreshBlog.toString()}>
+      {!showDetails && basicBlog()}
+      {showDetails && fullBlog()}
+    </div>
+
+
   )
 }
 
